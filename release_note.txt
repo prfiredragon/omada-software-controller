@@ -1,0 +1,48 @@
+If you are planning to upgrade from the old controller to this version, please read the Omada Controller Upgrade Guide before upgrading the controller. 
+Upgrade Guide: https://www.tp-link.com/en/omada-sdn/controller-upgrade
+
+1. Supported device models and firmware
+•	EAP
+EAP110_V4 3.20.0 Build 20200525 Rel.36899 and above
+EAP115_V4 3.20.0 Build 20200525 Rel.36931 and above
+EAP225_V3 2.20.0 Build 20200422 Rel.70513 and above
+EAP245_V3 2.20.0 Build 20200423 Rel.36779 and above
+EAP115-Wall_V1 1.20.0 Build 20200509 Rel.63986 and above
+EAP225-Wall_V2 1.20.0 Build 20200422 Rel.70504 and above
+EAP110-Outdoor_V3 3.20.0 Build 20200511 Rel.33388 and above
+EAP225-Outdoor_V1 1.20.0 Build 20200422 Rel.70543 and above
+EAP690E HD, EAP670, EAP660 HD, EAP650, EAP620 HD, EAP615-Wall, EAP610, EAP610-Outdoor, 
+EAP265 HD, EAP230-Wall, EAP235-Wall
+•	Switch
+TL-SX3016F, TL-SX3008F
+TL-SG3452XP, TL-SG3452X, TL-SG3452P, TL-SG3452
+TL-SG3428XMP, TL-SG3428MP, TL-SG3428XF, TL-SG3428X, TL-SG3428
+TL-SG3210XHP-M2, TL-SX3206HPP
+TL-SG2428P, TL-SG2218, TL-SG2008P, TL-SG2210MP
+TL-SG3210 V3, TL-SG2210P V3.2, TL-SG2008 V3, TL-SL2428P V4, and above versions
+•	Gateway
+ER605 (TL-R605) v1/v2, ER7206 (TL-ER7206), ER8411
+
+2. New Features & Enhancements
+1) Added WLAN and AI WLAN Optimization support for the 6GHz band. When 6GHz is checked, unsupported encryption methods and WPA modes are automatically hidden.
+2) Added support for Power Saving mode and PSC (Preferred Scanning Channel), adapted to EAP690E HD.
+3) Added multi-language support, including Deutsch, Français, Español, Italiano, Português, Русский, Türkçe, 日本語, 中文(繁體), 한국어. You can set it in Settings > Maintenance > User Interface > Language.
+4) Changed the default 802.1X mode from Force Authorized to Auto, to facilitate configuration of 802.1X.
+5) Added support to log out of the Hotspot Manager.
+6) Added support to customize the MAC address format for PPSK with RADIUS.
+7) The following optimizations were made to the MAP function: added EAP antenna parameters and 6GHz band, supported modifying EAP mounting type and installation angle, supported copying AP and recording interception area for simulation result evaluation, and fixed some bugs.
+8) Added the Site Permission for Administrators, to allow the creation or deletion of sites.
+9) Allowed Administrators to export data (Setting > Services > Export Data).
+10) Alert emails will be sent once when the same Email address is set for multiple accounts.
+11) Re-supported the use of port 443 as the HTTPS management port. Note that port 443 is a privileged port and requires additional configuration of Linux, which may cause the controller to fail to start, see https://www.tp-link.com/support/faq/3429/ for details.
+
+3. Bug Fixed
+1) Fixed the bug that the Term of Service of Portal could not be displayed correctly due to special characters.
+
+Notes
+1) This version of the controller is fully applied to the Omada APP of version 4.4 or above.
+2) Omada SDN Controller can only manage certain devices running the supported firmware. Please confirm that your device is compatible with the SDN Controller.
+3) If you are using an old Controller and plan to upgrade to this version, please follow the procedure of the Omada Controller Upgrade Guide.
+4) Once upgraded to this version of Omada Controller, you will be NOT able to downgrade to version 3.2.17 or below. 
+5) Java 8 (or OpenJDK-8) and above, MongoDB v3 and v4 are necessary for Controller.
+6) 64-bit Linux Operating System is supported.
