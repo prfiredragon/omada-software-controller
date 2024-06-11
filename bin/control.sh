@@ -34,13 +34,14 @@ PID_FILE="/var/run/${NAME}.pid"
 
 help() {
     echo "usage: $0 help"
-    echo "       $0 (start|stop|status)"
+    echo "       $0 (start|stop|status|version)"
     cat <<EOF
 
 help       - this screen
 start      - start the service(s)
 stop       - stop  the service(s)
 status     - show the status of the service(s)
+version    - show the version of the service(s)
 
 EOF
 }
@@ -72,6 +73,10 @@ check_omada_user() {
         echo "Failed to start ${DESC}. Please chown -R ${OMADA_USER} ${WORK_DIR}"
         exit 1
     }
+}
+
+check_version() {
+    echo "Omada Controller v5.13.30.8 for Linux (X64)"
 }
 
 # root permission check
@@ -109,10 +114,14 @@ HTTP_PORT=${HTTP_PORT:-8088}
 # return: 1,running; 0, not running;
 is_in_service() {
     http_code=$(curl -I -m 10 -o /dev/null -s -w %{http_code} http://localhost:${HTTP_PORT}/actuator/linux/check)
-    if [ "${http_code}" != "200" ]; then
-        return 0
+    if [ "${http_code}" == "200" ]; then
+         return 1
+    elif [ "${http_code}" == "503" ]; then
+            return 2
+    elif [ "${http_code}" == "000" ]; then
+            return 3
     else
-        return 1
+         return 0
     fi
 }
 
@@ -168,17 +177,20 @@ start() {
     ${JSVC} ${JSVC_OPTS} ${MAIN_CLASS} start
 
     count=0
-
+    norp_count=0
     while true
     do
         is_in_service
-        if  [ 1 == $? ]; then
+        if  [ 1 == $? ] || [ 2 == $? ]; then
             break
         else
             sleep 1
             echo -n "."
+            if  [ 3 == $? ]; then
+                norp_count=`expr $norp_count + 1`
+            fi
             count=`expr $count + 1`
-            if [ $count -gt 300 ]; then
+            if [ $count -gt 2400 ] || [ $norp_count -gt 300 ]; then
                 break
             fi
         fi
@@ -187,7 +199,7 @@ start() {
     echo "."
 
     is_in_service
-    if  [ 1 == $? ]; then
+    if  [ 1 == $? ] || [ 2 == $? ]; then
         echo "Started successfully."
         echo You can visit http://localhost:${HTTP_PORT} on this host to manage the wireless network.
     else
@@ -247,7 +259,7 @@ if [ $# != 1 ]
 then
     help
     exit
-elif [[ $1 != "start" && $1 != "stop" && $1 != "status" ]]
+elif [[ $1 != "start" && $1 != "stop" && $1 != "status" && $1 != "version" ]]
 then
     help
     exit
@@ -259,4 +271,6 @@ elif [ $1 == "stop" ]; then
     stop
 elif [ $1 == "status" ]; then
     status
+elif [ $1 == "version" ]; then
+    check_version
 fi

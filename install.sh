@@ -81,9 +81,27 @@ import_mongo_db() {
             tar zxvf ${DB_FILE_NAME} -C ${DATA_DIR}
 
             rm -rf ${DB_FILE_NAME} > /dev/null 2>&1
-            echo "Import previous setting seccess."
+            echo "Import previous setting success."
         fi
     fi
+}
+
+# return: 0, compatible; 1, not compatible;
+version_compatible() {
+    to_be_installed_version="Omada Controller v5.13.30.8 for Linux (X64)"
+    installed_version=$(${INSTALLDIR}/bin/control.sh version)
+    if [[ "$to_be_installed_version" == "Omada Pro Controller"* ]]; then
+        if [[ "$installed_version" != "Omada Pro Controller"* ]]; then
+          echo "Omada Controller already exists and cannot be upgraded to Omada Pro Controller. If you want to install the Omada Pro Controller, uninstall the current controller first."
+          exit
+        fi
+    else
+        if [[ "$installed_version" == "Omada Pro Controller"* ]]; then
+            echo "Omada Pro Controller already exists and cannot be downgraded to Omada Controller. If you want to install the ordinary version, uninstall the Pro version first."
+            exit
+        fi
+    fi
+    return 0
 }
 
 # return: 0, exist; 1, not exist;
@@ -103,6 +121,7 @@ dir_exist() {
 
         if test -e ${INSTALLDIR}/uninstall.sh
         then
+            version_compatible
             echo "An incompatible controller version has been detected. You are strongly recommended to back up configurations of the current version before upgrading. And you can import the configurations after the installation. Input \"Yes\" to continue with upgrade or \"No\" to cancel this upgrade:(y/n):"
             read input
             confirm=`echo $input | tr '[a-z]' '[A-Z]'`
