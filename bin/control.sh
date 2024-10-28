@@ -27,7 +27,7 @@ JAVA_TOOL="${JRE_HOME}/bin/java"
 JAVA_OPTS="-server -XX:MaxHeapFreeRatio=60 -XX:MinHeapFreeRatio=30  -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=${LOG_DIR}/java_heapdump.hprof -Djava.awt.headless=true"
 MAIN_CLASS="com.tplink.smb.omada.starter.OmadaLinuxMain"
 
-OMADA_USER=${OMADA_USER:-root}
+OMADA_USER=${OMADA_USER:-omada}
 OMADA_GROUP=$(id -gn ${OMADA_USER})
 
 PID_FILE="/var/run/${NAME}.pid"
